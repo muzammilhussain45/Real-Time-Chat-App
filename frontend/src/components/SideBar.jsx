@@ -5,7 +5,7 @@ import { IoIosSearch } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
-import { setOtherUsers, setUserData } from '../redux/userSlice';
+import { setOtherUsers, setSelectedUser, setUserData } from '../redux/userSlice';
 import axios from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -15,7 +15,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const SideBar = () => {
 
-  let { userData, otherUsers } = useSelector((state) => state.user)
+  let { userData, otherUsers, selectedUser } = useSelector((state) => state.user)
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState(false);
@@ -37,7 +37,7 @@ const SideBar = () => {
 
 
   return (
-    <div className='lg:w-[30%] w-full h-full bg-slate-200'>
+    <div className={`lg:w-[30%] w-full h-full lg:block bg-slate-200 ${!selectedUser? "block": "hidden"}`}>
       {/* Logout button */}
       <div className='mt-[10px] w-[60px] h-[60px] overflow-hidden flex items-center justify-center rounded-full shadow-gray-500 shadow-lg  bg-[#20c7ff] cursor-pointer fixed bottom-[10px] left-[10px] text-gray-700' onClick={handleLogout}>
         <TbLogout2 className='w-[25px] h-[25px] ' />
@@ -75,8 +75,8 @@ const SideBar = () => {
 
       <div className='w-full h-[60vh] overflow-auto flex flex-col gap-[20px] items-center mt-[20px]'>
         {otherUsers?.users?.map((user) => (
-          <div key={user._id} className='w-[95%] h-[60px] flex  items-center gap-[20px] shadow-gray-500 bg-white shadow-lg  rounded-full hover:bg-[#b4b4d6] cursor-pointer'>
-            <div key={user._id} className='w-[60px] h-[60px]  shadow-gray-500 shadow-lg flex items-center justify-center gap-[10px] rounded-full overflow-hidden'>
+          <div key={user._id} className='w-[95%] h-[60px] flex  items-center gap-[20px] shadow-gray-500 bg-white shadow-lg  rounded-full hover:bg-[#b4b4d6] cursor-pointer' onClick={() => dispatch(setSelectedUser(user))}>
+            <div className='w-[60px] h-[60px]  shadow-gray-500 shadow-lg flex items-center justify-center gap-[10px] rounded-full overflow-hidden'>
               <img src={user.image || dp} alt="Profile Picture" className='h-[100%]' />
 
             </div>
