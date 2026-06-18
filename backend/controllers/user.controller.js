@@ -26,7 +26,7 @@ export const editProfile = async (req, res) => {
 
         let user = await User.findByIdAndUpdate(req.userId,{
             name, image
-        });
+        },{new:true});
         
         if(!user){
             return res.status(400).json({ message: "User does not found" });
@@ -37,5 +37,15 @@ export const editProfile = async (req, res) => {
     } catch (error) {
 
         return res.status(500).json({ message: `Profile update error: ${error.message}` });
+    }
+}
+
+
+export const getOtherUser = async (req, res) => {
+    try {
+        const users = await User.find({_id: {$ne: req.userId}}).select("-password");
+        return res.status(200).json({ users });
+    } catch (error) {
+        return res.status(500).json({ message: `getOtherUser error: ${error.message}` });
     }
 }

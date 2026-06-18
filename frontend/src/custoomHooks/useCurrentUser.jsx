@@ -6,7 +6,7 @@ import { setUserData } from "../redux/userSlice";
 
 
 
-const getCurrentUser = () => {
+const useCurrentUser = () => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -29,4 +29,4 @@ const getCurrentUser = () => {
 }
 
 
-export default getCurrentUser;
+export default useCurrentUser;

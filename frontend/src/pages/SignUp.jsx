@@ -31,6 +31,7 @@ const SignUp = () => {
     try {
       let result = await axios.post(`${backendUrl}/api/auth/signup`, { name, userName: username, email, password: passwordValue }, { withCredentials: true });
       dispatch(setUserData(result.data));
+      navigate('/profile');
       setName("");
       setUsername("");
       setEmail("");

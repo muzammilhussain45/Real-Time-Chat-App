@@ -24,6 +24,7 @@ const Login = () => {
     try {
       let result = await axios.post(`${backendUrl}/api/auth/login`, { email, password: passwordValue }, { withCredentials: true });
       dispatch(setUserData(result.data));
+      navigate('/');
       setEmail("");
       setPasswordValue("");
       setLoading(false);
