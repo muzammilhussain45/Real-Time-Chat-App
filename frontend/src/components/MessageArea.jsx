@@ -12,6 +12,7 @@ import SenderMessage from './SenderMessage';
 import ReceiverMessage from './ReceiverMessage';
 import axios from 'axios';
 import { setMessages } from '../redux/messageSlice';
+import { useEffect } from 'react';
 
 
 
@@ -21,6 +22,7 @@ const MessageArea = () => {
   let { selectedUser } = useSelector(state => state.user)
   let { messages } = useSelector(state => state.message)
   let userData = useSelector(state => state.user.userData);
+  let socket = useSelector(state => state.user.socket);
 
   let dispatch = useDispatch();
   let [showPicker, setShowPicker] = useState(false);
@@ -31,6 +33,8 @@ const MessageArea = () => {
 
   const handleSendMessage =async (e) => {
     e.preventDefault();
+    if (!input && !backendImage) return;
+
      try {
       let formData = new FormData();
       formData.append("message", input);
@@ -59,6 +63,15 @@ const MessageArea = () => {
     setBackendImage(file);
 
   }
+
+  useEffect(()=>{
+    socket.on('newMessage',(message)=>{
+      dispatch(setMessages([...messages, message]));
+    })
+
+    return () => socket.off('newMessage');
+
+  },[messages,setMessages])
   
 
   return (
@@ -79,10 +92,10 @@ const MessageArea = () => {
 
         </div>
 
-        <div className='w-full h-[550px] flex flex-col py-[30px] px-[20px] overflow-auto gap-[20px]'>
+        <div className='w-full h-[70%] flex flex-col py-[20px] px-[20px] overflow-auto gap-[20px]'>
           {
             showPicker &&  <div className='absolute bottom-[120px] left-[20px]'>
-              <EmojiPicker className='shadow-lg' width={250} height={350} onEmojiClick={onEmojiClick} />
+              <EmojiPicker className='shadow-lg z-[100]' width={250} height={350} onEmojiClick={onEmojiClick} />
             </div>
           }
 
@@ -114,9 +127,10 @@ const MessageArea = () => {
           <div onClick={() => image.current.click()}>
             <FaImages className='cursor-pointer w-[25px] h-[25px] text-white' />
           </div>
-          <button>
+         {(input.length > 0 || backendImage != null) && (
+          <button type="submit">
             <IoSendSharp className='w-[25px] h-[25px] text-white cursor-pointer' />
-          </button>
+          </button>)}
         </form>
       </div>
      }
