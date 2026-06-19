@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserData } from '../redux/userSlice';
+import { setSelectedUser, setUserData } from '../redux/userSlice';
 
 const Login = () => {
 
@@ -24,6 +24,7 @@ const Login = () => {
     try {
       let result = await axios.post(`${backendUrl}/api/auth/login`, { email, password: passwordValue }, { withCredentials: true });
       dispatch(setUserData(result.data));
+      dispatch(setSelectedUser(null));
       navigate('/');
       setEmail("");
       setPasswordValue("");

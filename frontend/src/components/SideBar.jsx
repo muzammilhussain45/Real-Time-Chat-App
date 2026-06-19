@@ -19,7 +19,6 @@ const SideBar = () => {
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState(false);
-  console.log(otherUsers);
   const navigate = useNavigate();
 
 
